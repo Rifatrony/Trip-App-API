@@ -1,6 +1,5 @@
 const mongoose = require("mongoose");
-const UserSchema = mongoose.Schema({
-    
+const TourSchema = mongoose.Schema({
     id: {
         type: String,
         require: true,
@@ -11,26 +10,22 @@ const UserSchema = mongoose.Schema({
         require: true,
     },
 
-    phone: {
-        type: Number,
-        require: true,
-    },
-
-    password: {
+    added_by: {
         type: String,
         require: true,
     },
 
-    role: {
+    start_date: {
         type: String,
-        default: "admin",
-    }
+        require: true,
+    },
+}, 
 
 
-},
+{ timestamps: {} },
 
-{ timestamps: {} }
 
 );
 
-module.exports = mongoose.model("User", UserSchema);
+module.exports = mongoose.model("Tour", TourSchema);
+

@@ -1,5 +1,5 @@
 const mongoose = require("mongoose");
-const UserSchema = mongoose.Schema({
+const MemberSchema = mongoose.Schema({
     
     id: {
         type: String,
@@ -16,16 +16,24 @@ const UserSchema = mongoose.Schema({
         require: true,
     },
 
-    password: {
+    tour_id: {
         type: String,
         require: true,
     },
 
-    role: {
+    added_by: {
         type: String,
-        default: "admin",
-    }
+        require: true,
+    },
 
+    given_amount: {
+        type: Number,
+        default: 0,
+    },
+
+    image: {
+        type: String,
+    },
 
 },
 
@@ -33,4 +41,4 @@ const UserSchema = mongoose.Schema({
 
 );
 
-module.exports = mongoose.model("User", UserSchema);
+module.exports = mongoose.model("Member", MemberSchema);

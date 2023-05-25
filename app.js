@@ -3,9 +3,10 @@ const express = require('express');
 const app = express();
 const cors = require("cors");
 require("./config/db");
-// const adminRouter = require("./routes/admin/admin.route");
-// const customerRouter = require("./routes/customer/customer.route");
-// const productRouter = require("./routes/customer/product.route");
+
+const userRouter = require("./routes/user.routes");
+const memberRouter = require("./routes/members.routes");
+const tourRouter = require("./routes/tour.routes");
 
 
 app.use(cors());
@@ -15,6 +16,10 @@ app.use(express.json());
 // app.use("/api/v1/admin", adminRouter);
 // app.use("/api/v1/customer", customerRouter);
 // app.use("/api/v1/", productRouter);
+
+app.use("/api/auth", userRouter);
+app.use("/api/member", memberRouter);
+app.use("/api/tour", tourRouter);
 
 app.get("/", (req, res)=>{
     res.status(404).json({
