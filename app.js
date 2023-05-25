@@ -7,6 +7,7 @@ require("./config/db");
 const userRouter = require("./routes/user.routes");
 const memberRouter = require("./routes/members.routes");
 const tourRouter = require("./routes/tour.routes");
+const costRouter = require("./routes/cost.routes");
 
 
 app.use(cors());
@@ -20,6 +21,7 @@ app.use(express.json());
 app.use("/api/auth", userRouter);
 app.use("/api/member", memberRouter);
 app.use("/api/tour", tourRouter);
+app.use("/api/cost", costRouter);
 
 app.get("/", (req, res)=>{
     res.status(404).json({
