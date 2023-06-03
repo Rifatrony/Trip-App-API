@@ -9,10 +9,12 @@ const addMember = async (req, res) => {
     try {
         const existingMember = await Member.findOne({ phone: req.body.phone });
         if (existingMember) {
+
             res.status(400).json({
+                code: 400,
                 success: false,
                 message: "This person is already added try with another phone number"
-            })
+            });
         }
         else {
             const newMember = new Member({
@@ -25,11 +27,15 @@ const addMember = async (req, res) => {
             })
             await newMember.save();
             res.status(200).json({
-                message: "New member added"
+                code: 200,
+                success: true,
+                message: "Member added"
             });
         }
     } catch (error) {
         res.status(500).json({
+            code: 500,
+            success: false,
             message: error.message
         });
     }
@@ -37,24 +43,12 @@ const addMember = async (req, res) => {
 
 const getMembers = async (req, res) => {
     try {
-        // const tourIds = await Member.distinct('tour_id', {added_by: req.id});
-        // console.log(tourIds);
-        // const allMember = tourIds.map(tourId => {
-        //     return Tour.findOne({id: tourId})
-        //     .select('name')
-        //     .exec();
-        // });
-
-        // const mem = await Promise.all(allMember);
-        // const members = await Member.find({added_by: req.id});
-        // res.status(200).json({
-        //     member: mem
-        // })
 
         const members = await Member.aggregate([
             {
                 $match: {
                   added_by: req.id,
+                  tour_id: req.params.tour_id
                 },
             },
 
@@ -104,14 +98,23 @@ const getMembers = async (req, res) => {
         ]);
 
         res.status(200).json({
+            code: 200,
+            success: true,
+            message: "success",
             members: members
-        });
+        })
 
     } catch (error) {
         res.status(500).json({
+            code: 500,
+            success: false,
             message: error.message
-        })
+        });
     }
+}
+
+const addMoney = async (req, res) => {
+    
 }
 
 

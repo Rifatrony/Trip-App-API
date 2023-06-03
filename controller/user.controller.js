@@ -14,6 +14,7 @@ const userRegistration = async (req, res) => {
         if (existingUser) {
             res.status(400).json({
                 success: false,
+                code: 400,
                 "message": "This phone is already used"
             })
         }
@@ -26,7 +27,9 @@ const userRegistration = async (req, res) => {
                     password: hash
                 })
                 await newUser.save();
+                
                 res.status(200).json({
+                    "code": 200,
                     message: "Registration Successful"
                 })
             });
@@ -34,6 +37,7 @@ const userRegistration = async (req, res) => {
 
     } catch (error) {
         res.status(500).json({
+            code: 500,
             message: error.message
         })
     }
@@ -61,18 +65,39 @@ const userLogin = async (req, res) => {
         }
         else {
             res.status(404).json({
+                code: 404,
                 "message": "Authentication Failed"
             })
         }
     } catch (error) {
         res.status(500).json({
+            code: 500,
             "message": error.message,
         })
+    }
+}
+
+const userProfile = async (req, res) => {
+    try {
+        const user = await User.findOne({ id: req.id }, { _id: 0, createdAt: 0, updatedAt: 0, __v: 0, password: 0 });
+        res.status(200).json({
+            code: 200,
+            success: true,
+            message: "success",
+            user: user
+        })
+    } catch (error) {
+        res.status(500).json({
+            code: 500,
+            success: false,
+            message: error.message
+        });
     }
 }
 
 module.exports = {
     userRegistration,
     userLogin,
+    userProfile,
 }
 

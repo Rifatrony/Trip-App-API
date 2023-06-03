@@ -5,6 +5,6 @@ const router = express.Router();
 
 
 router.post("/add/:tour_id", checkLogin, addMember);
-router.get("/all", checkLogin, getMembers);
+router.get("/all/:tour_id", checkLogin, getMembers);
 
 module.exports = router;

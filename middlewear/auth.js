@@ -6,19 +6,15 @@ const checkLogin = (req, res, next)=>{
         const token  = authorization.split(' ')[1];
         const decode = jwt.verify(token, process.env.JWT_SECRET);
 
-        const {phone, id, exp } = decode;
+        const {phone, id } = decode;
         req.phone = phone;
         req.id = id;
 
-        if (Date.now() >= exp * 1000) {
-            return res.status(401).json({ message: 'Token has expired' });
-        }
-        else{
-            next();
-        }
+        next();
 
     } catch (error) {
         res.status(404).json({
+            code: 404,
             "message": "UnAuthenticated"
         })
         next();

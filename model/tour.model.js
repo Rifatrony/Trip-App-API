@@ -19,11 +19,13 @@ const TourSchema = mongoose.Schema({
         type: String,
         require: true,
     },
+
+    end_date: {
+        type: String,
+    },
 }, 
 
-
 { timestamps: {} },
-
 
 );
 
