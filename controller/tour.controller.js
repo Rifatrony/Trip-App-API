@@ -46,5 +46,70 @@ const getMyTour = async (req, res) => {
     }
 }
 
-module.exports = { addTour, getMyTour }
+const deleteTour = async (req, res) => {
+    try {
+        const id = req.params.id;
+        const deletedTour = await Tour.findOneAndDelete({ id: id });
+
+        if (deletedTour) {
+            res.status(200).json({
+                code: 200,
+                success: true,
+                message: "Tour deleted"
+            });
+        } else {
+            res.status(404).json({
+                code: 404,
+                success: false,
+                message: "Tour not found"
+            });
+        }
+    } catch (error) {
+        res.status(500).json({
+            code: 500,
+            success: false,
+            message: error.message
+        });
+    }
+}
+
+const updateTour = async (req, res) => {
+    try {
+        const tourId = req.params.id;
+
+        // Find the tour by ID
+        const tour = await Tour.findOne({ id: tourId });
+
+        if (!tour) {
+            return res.status(404).json({
+                code: 404,
+                success: false,
+                message: "Tour not found",
+            });
+        }
+
+        // Update the tour data
+        tour.name = req.body.name || tour.name;
+        tour.start_date = req.body.start_date || tour.start_date;
+        tour.end_date = req.body.end_date || tour.end_date;
+
+        // Save the updated tour
+        await tour.save();
+
+        res.status(200).json({
+            code: 200,
+            success: true,
+            message: "Tour updated",
+        });
+    } catch (error) {
+        res.status(500).json({
+            code: 500,
+            success: false,
+            message: error.message,
+        });
+    }
+};
+
+
+module.exports = { addTour, getMyTour, updateTour, deleteTour, }
 

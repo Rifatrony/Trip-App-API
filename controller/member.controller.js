@@ -47,8 +47,8 @@ const getMembers = async (req, res) => {
         const members = await Member.aggregate([
             {
                 $match: {
-                  added_by: req.id,
-                  tour_id: req.params.tour_id
+                    added_by: req.id,
+                    tour_id: req.params.tour_id
                 },
             },
 
@@ -95,6 +95,11 @@ const getMembers = async (req, res) => {
                     },
                 },
             },
+            {
+                $sort: {
+                    createdAt: -1
+                }
+            }
         ]);
 
         res.status(200).json({
@@ -114,12 +119,114 @@ const getMembers = async (req, res) => {
 }
 
 const addMoney = async (req, res) => {
-    
+    try {
+        const member = await Member.findOne({ id: req.params.id });
+
+        if (!member) {
+            return res.status(404).json({
+                code: 404,
+                success: false,
+                message: "Member not found",
+            });
+        }
+        else {
+            const givenAmount = Number(req.body.given_amount);
+            const updatedAmount = member.given_amount + givenAmount;
+            member.given_amount = updatedAmount;
+            await member.save();
+            res.status(200).json({
+                code: 200,
+                success: true,
+                message: "Money added to member",
+                updatedAmount: updatedAmount,
+            });
+        }
+
+    } catch (error) {
+        res.status(500).json({
+            code: 500,
+            success: false,
+            message: error.message
+        });
+    }
+}
+
+const withdrawMoneyFromMember = async (req, res) => {
+    try {
+        const member = await Member.findOne({ id: req.params.id });
+
+        if (!member) {
+            return res.status(404).json({
+                code: 404,
+                success: false,
+                message: "Member not found",
+            });
+        }
+
+        const withdrawAmount = Number(req.body.given_amount);
+
+        if (withdrawAmount > member.given_amount) {
+            return res.status(400).json({
+                code: 400,
+                success: false,
+                message: "Withdrawal amount cannot be more then the given amount",
+            });
+        }
+
+        const updatedAmount = member.given_amount - withdrawAmount;
+
+        member.given_amount = updatedAmount;
+        await member.save();
+
+        res.status(200).json({
+            code: 200,
+            success: true,
+            message: "Money withdrawn from member",
+            updatedAmount: updatedAmount,
+        });
+    } catch (error) {
+        res.status(500).json({
+            code: 500,
+            success: false,
+            message: error.message,
+        });
+    }
+};
+
+
+const deleteMember = async (req, res) => {
+    try {
+        const id = req.params.id;
+        const deletedMember = await Member.findOneAndDelete({ id: id });
+
+        if (deletedMember) {
+            res.status(200).json({
+                code: 200,
+                success: true,
+                message: "Member deleted"
+            });
+        } else {
+            res.status(404).json({
+                code: 404,
+                success: false,
+                message: "Member not found"
+            });
+        }
+    } catch (error) {
+        res.status(500).json({
+            code: 500,
+            success: false,
+            message: error.message
+        });
+    }
 }
 
 
 module.exports = {
     addMember,
     getMembers,
+    addMoney,
+    withdrawMoneyFromMember,
+    deleteMember,
 }
 
