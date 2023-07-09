@@ -7,6 +7,19 @@ const bcrypt = require('bcrypt');
 const saltRounds = 10;
 const jwt = require("jsonwebtoken");
 
+const check = async (req, res) => {
+    try {
+        res.status(200).json({
+            message: "Check Love server"
+        })
+    } catch (error) {
+        res.status(500).json({
+            message: error.message
+        })
+    }
+}
+
+
 const userRegistration = async (req, res) => {
     try {
 
@@ -27,7 +40,7 @@ const userRegistration = async (req, res) => {
                     password: hash
                 })
                 await newUser.save();
-                
+
                 res.status(200).json({
                     success: true,
                     "code": 200,
@@ -101,5 +114,6 @@ module.exports = {
     userRegistration,
     userLogin,
     userProfile,
+    check
 }
 
