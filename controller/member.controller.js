@@ -7,11 +7,11 @@ const { v4: uuidv4 } = require("uuid");
 
 const addMember = async (req, res) => {
     try {
-        const existingMember = await Member.findOne({ phone: req.body.phone });
+        const existingMember = await Member.findOne({added_by: req.id, phone: req.body.phone });
         if (existingMember) {
 
-            res.status(400).json({
-                code: 400,
+            res.status(200).json({
+                code: 200,
                 success: false,
                 message: "This person is already added try with another phone number"
             });

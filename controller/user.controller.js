@@ -12,9 +12,9 @@ const userRegistration = async (req, res) => {
 
         const existingUser = await User.findOne({ phone: req.body.phone });
         if (existingUser) {
-            res.status(400).json({
+            res.status(200).json({
                 success: false,
-                code: 400,
+                code: 200,
                 "message": "This phone is already used"
             })
         }
@@ -29,6 +29,7 @@ const userRegistration = async (req, res) => {
                 await newUser.save();
                 
                 res.status(200).json({
+                    success: true,
                     "code": 200,
                     message: "Registration Successful"
                 })
@@ -37,6 +38,7 @@ const userRegistration = async (req, res) => {
 
     } catch (error) {
         res.status(500).json({
+            success: false,
             code: 500,
             message: error.message
         })
