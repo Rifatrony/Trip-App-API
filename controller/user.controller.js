@@ -10,7 +10,7 @@ const jwt = require("jsonwebtoken");
 const check = async (req, res) => {
     try {
         res.status(200).json({
-            message: "Check Love server"
+            message: "Check Live server"
         })
     } catch (error) {
         res.status(500).json({
@@ -76,7 +76,17 @@ const userLogin = async (req, res) => {
                         "message": "Login Successful"
                     })
                 }
+                else {
+                    res.status(200).json({
+                        "message": "Authentication Failed: Incorrect password."
+                    });
+                }
             });
+        }
+        else if(!user) {
+            res.status(200).json({
+                "message": "Phone not found"
+            })
         }
         else {
             res.status(404).json({
