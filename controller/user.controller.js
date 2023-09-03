@@ -10,7 +10,7 @@ const jwt = require("jsonwebtoken");
 const check = async (req, res) => {
     try {
         res.status(200).json({
-            message: "Check Live server"
+            message: "Check Live server Test"
         })
     } catch (error) {
         res.status(500).json({
