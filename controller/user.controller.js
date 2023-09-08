@@ -85,7 +85,7 @@ const userLogin = async (req, res) => {
         }
         else if(!user) {
             res.status(200).json({
-                "message": "Phone not found"
+                "message": "Authentication Failed: Incorrect Phone number"
             })
         }
         else {
